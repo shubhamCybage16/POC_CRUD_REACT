@@ -1,13 +1,11 @@
 import React from "react";
 import DataTable from "react-data-table-component";
 import Card from "@material-ui/core/Card";
-
 import SortIcon from "@material-ui/icons/ArrowDownward";
 import { useEffect } from "react";
 import axios from "axios";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-
 import { useState } from "react";
 
 const columns = (deleteUser, history) => [
@@ -71,11 +69,6 @@ const columns = (deleteUser, history) => [
   },
 ];
 
-/*
-const deleteUser = (id) => {
-  console.log(id);
-};*/
-
 function Home() {
   const [users, setUser] = useState([]);
   const history = useHistory();
@@ -86,8 +79,8 @@ function Home() {
 
   const loadUsers = async () => {
     const result = await axios.get("http://localhost:3003/users");
-    setUser(result.data.reverse());
-    // setUser(result.data);
+    // setUser(result.data.reverse());
+    setUser(result.data);
   };
 
   const deleteUser = async (id) => {

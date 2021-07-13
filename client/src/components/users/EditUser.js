@@ -41,7 +41,7 @@ const EditUser = () => {
       <Paper elevation={10} style={paperStyle}>
         <Grid align="center">
           <h2 style={headerStyle} data-testid="header">
-            Add User
+            Edit User
           </h2>
         </Grid>
         <Grid align="center" style={gridStyle}>

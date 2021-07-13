@@ -28,18 +28,13 @@ export default function Navbar() {
             POC CRUD
           </Typography>
 
-          {/*--------------------*/}
-          <Typography variant="h6" color="secondary" className={classes.root}>
-            <Link exact to="/">
-              Home
-            </Link>
-          </Typography>
-
-          <Typography variant="h6">
-            <Link to="/users/add">Add User</Link>
-          </Typography>
-
-          {/*--------------------*/}
+          <Button color="inherit" component={Link} to="/">
+            {" "}
+            Home{" "}
+          </Button>
+          <Button color="inherit" component={Link} to="/users/add">
+            Add User
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
