@@ -1,30 +1,28 @@
-import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Grid, Paper, TextField, Button } from "@material-ui/core";
+import { useForm } from "react-hook-form";
+
 const AddUser = () => {
   let history = useHistory();
-  const [user, setUser] = useState({
-    name: "",
-    username: "",
-    email: "",
-    phone: "",
-    website: "",
-  });
+
   const paperStyle = { padding: "30px 20px", width: 700, margin: "20px auto" };
   const headerStyle = { margin: 0 };
   const gridStyle = { margin: "15px" };
   const textStyle = { margin: "10px" };
-  const { name, username, email, phone, website } = user;
-  const onInputChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    await axios.post("http://localhost:3003/users", user);
+  const onSubmit = async (data) => {
+    console.log(data);
+    await axios.post("http://localhost:3003/users", data);
     history.push("/");
   };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   return (
     <Grid>
       <Paper elevation={10} style={paperStyle}>
@@ -34,67 +32,91 @@ const AddUser = () => {
           </h2>
         </Grid>
         <Grid align="center" style={gridStyle}>
-          <TextField
-            label="Enter name"
-            variant="outlined"
-            required
-            name="name"
-            value={name}
-            onChange={(e) => onInputChange(e)}
-            style={textStyle}
-            fullWidth
-          />
-          <TextField
-            label="Enter username"
-            variant="outlined"
-            required
-            name="username"
-            value={username}
-            onChange={(e) => onInputChange(e)}
-            style={textStyle}
-            fullWidth
-          />
-          <TextField
-            label="Enter email"
-            variant="outlined"
-            required
-            style={textStyle}
-            fullWidth
-            name="email"
-            value={email}
-            onChange={(e) => onInputChange(e)}
-          />
-          <TextField
-            label="Enter pnone number"
-            variant="outlined"
-            required
-            style={textStyle}
-            fullWidth
-            name="phone"
-            value={phone}
-            onChange={(e) => onInputChange(e)}
-          />
-          <TextField
-            label="Enter website Name"
-            variant="outlined"
-            required
-            style={textStyle}
-            fullWidth
-            name="website"
-            value={website}
-            onChange={(e) => onInputChange(e)}
-          />
-          <div className="formSubmitButton">
-            <Button
-              color="primary"
-              //onSubmit={(e) => onSubmit(e)}
-              onClick={(e) => onSubmit(e)}
-              variant="contained"
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <TextField
+              label="Enter name"
+              variant="outlined"
+              name="name"
               style={textStyle}
-            >
-              Submit
-            </Button>
-          </div>
+              fullWidth
+              {...register("name", {
+                required: "First Name is required",
+                validate: "sdf",
+              })}
+              error={Boolean(errors.name)}
+              helperText={errors.name?.message}
+            />
+            <TextField
+              label="Enter username"
+              variant="outlined"
+              name="username"
+              style={textStyle}
+              fullWidth
+              {...register("username", {
+                required: "username is required with min length 4",
+                minLength: 4,
+                validate: "sdf",
+              })}
+              error={Boolean(errors.username)}
+              helperText={errors.username?.message}
+            />
+            <TextField
+              label="Enter email"
+              variant="outlined"
+              type="email"
+              style={textStyle}
+              fullWidth
+              name="email"
+              {...register("email", {
+                required: "email is required",
+                pattern:
+                  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              })}
+              error={Boolean(errors.email)}
+              helperText={errors.email?.message}
+            />
+            <TextField
+              label="Enter pnone number"
+              variant="outlined"
+              style={textStyle}
+              fullWidth
+              name="phone"
+              {...register("phone", {
+                required: "10 digit phone is required",
+                validate: "sdf",
+                minLength: 10,
+                maxLength: 10,
+              })}
+              error={Boolean(errors.phone)}
+              helperText={errors.phone?.message}
+            />
+            {/* {errors.phone && errors.phone.type === "maxLength" && (
+              <span>Max length exceeded</span>
+            )} */}
+            <TextField
+              label="Enter website Name"
+              variant="outlined"
+              style={textStyle}
+              fullWidth
+              name="website"
+              {...register("website", {
+                required: "website is required",
+                validate: "sdf",
+              })}
+              error={Boolean(errors.website)}
+              helperText={errors.website?.message}
+            />
+            <div className="formSubmitButton">
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                style={textStyle}
+              >
+                Submit
+              </Button>
+            </div>
+          </form>
         </Grid>
       </Paper>
     </Grid>
